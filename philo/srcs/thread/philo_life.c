@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 14:14:07 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/09 19:27:51 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/09 19:45:45 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	lock_forks(t_philo *philo)
 	pthread_mutex_t	*fork1;
 	pthread_mutex_t	*fork2;
 
+	if (philo->id % 2 == 1)
+		usleep(1000);
 	fork1 = &philo->data->forks[ft_min(philo->l_fork, philo->r_fork)];
 	fork2 = &philo->data->forks[ft_max(philo->l_fork, philo->r_fork)];
 	pthread_mutex_lock(fork1);
