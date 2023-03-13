@@ -13,6 +13,8 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+/**********INCLUDES***********/
+
 # include <unistd.h>
 # include <stdio.h>
 # include <pthread.h>
@@ -20,6 +22,8 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/time.h>
+
+/***********DEFINES***********/
 
 # define SUCCESS	0
 # define FAILURE	1
@@ -34,6 +38,21 @@
 # define EAT_LOG	"is eating"
 # define FORK_LOG	"has taken a fork"
 
+/********ENUM AND STRUCT********/
+
+typedef enum e_check
+{
+	DEATH = 2,
+	FULL = 4,
+	SIGSTOP = 6
+}t_check;
+
+typedef enum e_state
+{
+	ALIVE,
+	DEAD
+}t_state;
+
 typedef enum e_signal
 {
 	CONTINUE,
@@ -42,7 +61,7 @@ typedef enum e_signal
 
 typedef enum e_mutex
 {
-	PRINT,
+	LOG,
 	COUNT,
 	END
 }t_mutex;
@@ -62,6 +81,7 @@ typedef struct s_philo
 	int				l_fork;
 	int				r_fork;
 	bool			dead;
+	pthread_mutex_t	infos;
 	t_time			time;
 	t_signal		sig;
 	struct s_data	*data;
@@ -81,11 +101,14 @@ typedef struct s_data
 	t_philo			*philo;
 }t_data;
 
+/********DECLARATION*********/
+
 int		init(t_data *data, int argc, char **argv);
 
 int		threads(t_data *data);
 void	*philo_life(void *arg);
-void	monitor(t_philo *philo);
+void	check(t_philo *philo, t_check check);
+void	*monitor(void *arg);
 
 int		timestamp(void);
 void	thread_pause(t_philo *philo, int time);

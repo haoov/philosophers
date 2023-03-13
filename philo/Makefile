@@ -42,9 +42,10 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/print/print_helper.c\
 				  $(SRCDIR)/thread/threads.c\
 				  $(SRCDIR)/thread/philo_life.c\
+				  $(SRCDIR)/thread/check.c\
 				  $(SRCDIR)/thread/monitor.c\
-				  $(SRCDIR)/timestamp.c\
-				  $(SRCDIR)/thread_pause.c
+				  $(SRCDIR)/time/timestamp.c\
+				  $(SRCDIR)/time/thread_pause.c
 HD				= $(HDDIR)/philo.h
 OBJS			= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRCS:.c=.o))
 DEPS			= $(patsubst $(SRCDIR)/%,$(DEPDIR)/%,$(SRCS:.c=.d))
@@ -72,11 +73,9 @@ $(NAME) : $(OBJS)
 	$(DONE_PRINT)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(PROGRESS)
 	@mkdir -p $(dir $@)
 	@mkdir -p $(patsubst $(OBJDIR)/%,$(DEPDIR)/%,$(dir $@))
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@ -MMD -MF $(DEP_FILE)
-	@printf "$(GREEN)Creating $(notdir $(@:.o=.d))\n$(NC)"
 	$(PROGRESS)
 	@printf "$(GREEN)Building $(notdir $@)$(NC)\n"
 

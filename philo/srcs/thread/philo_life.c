@@ -33,16 +33,16 @@ void	lock_forks(t_philo *philo)
 	fork1 = &philo->data->forks[ft_min(philo->l_fork, philo->r_fork)];
 	fork2 = &philo->data->forks[ft_max(philo->l_fork, philo->r_fork)];
 	pthread_mutex_lock(fork1);
+	check(philo, DEATH + SIGSTOP);
 	print_log(FORK_LOG, philo);
 	if (philo->l_fork == philo->r_fork)
 	{
-		philo->last_meal = philo->data->t0;
-		thread_pause(philo, philo->time.die - (philo->time.eat / 2));
+		thread_pause(philo, philo->time.die - 1);
 		return (print_log(DEATH_LOG, philo));
 	}
 	pthread_mutex_lock(fork2);
+	check(philo, DEATH + SIGSTOP);
 	print_log(FORK_LOG, philo);
-	print_log(EAT_LOG, philo);
 }
 
 void	philo_eat(t_philo *philo)
@@ -50,13 +50,16 @@ void	philo_eat(t_philo *philo)
 	lock_forks(philo);
 	if (philo->sig == STOP)
 		return (unlock_forks(philo));
+	print_log(EAT_LOG, philo);
+	pthread_mutex_lock(&philo->infos);
 	philo->last_meal = timestamp();
+	pthread_mutex_unlock(&philo->infos);
 	philo->meal_count++;
 	pthread_mutex_lock(&philo->data->mutex[COUNT]);
 	if (philo->meal_count == philo->data->max_meal)
 		philo->data->full_count++;
 	pthread_mutex_unlock(&philo->data->mutex[COUNT]);
-	monitor(philo);
+	check(philo, FULL + SIGSTOP);
 	thread_pause(philo, philo->time.eat);
 	print_log(SLEEP_LOG, philo);
 	unlock_forks(philo);
@@ -65,10 +68,13 @@ void	philo_eat(t_philo *philo)
 void	*philo_life(void *arg)
 {
 	t_philo		*philo;
+	pthread_t	th_monitor;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 1)
-		usleep((philo->time.eat / 2) * 1000);
+	philo->last_meal = philo->data->t0;
+	if (pthread_create(&th_monitor, NULL, monitor, philo) != 0)
+		return (NULL);
+	pthread_detach(th_monitor);
 	while (philo->sig == CONTINUE)
 	{
 		philo_eat(philo);

@@ -32,7 +32,7 @@ void	cleanup(t_data data)
 		free(data.philo);
 	if (data.forks)
 		clean_forks(data);
-	pthread_mutex_destroy(&data.mutex[PRINT]);
+	pthread_mutex_destroy(&data.mutex[LOG]);
 	pthread_mutex_destroy(&data.mutex[END]);
 	pthread_mutex_destroy(&data.mutex[COUNT]);
 }

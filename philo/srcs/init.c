@@ -56,6 +56,7 @@ static void	init_philo(t_data *data)
 	while (i < data->philo_nb)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
+		pthread_mutex_init(&data->philo[i].infos, NULL);
 		data->philo[i].id = i + 1;
 		data->philo[i].r_fork = i;
 		if (i == 0)
@@ -83,7 +84,7 @@ int	init(t_data *data, int argc, char **argv)
 			sizeof (pthread_mutex_t));
 	if (data->forks == NULL)
 		return (print_error(MALLOC_ERR, "init.c:57"), FAILURE);
-	pthread_mutex_init(&data->mutex[PRINT], NULL);
+	pthread_mutex_init(&data->mutex[LOG], NULL);
 	pthread_mutex_init(&data->mutex[COUNT], NULL);
 	pthread_mutex_init(&data->mutex[END], NULL);
 	init_philo(data);

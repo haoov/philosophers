@@ -20,9 +20,6 @@ void	thread_pause(t_philo *philo, int time)
 	while (philo->sig == CONTINUE && timestamp() - start < time)
 	{
 		usleep(500);
-		pthread_mutex_lock(&philo->data->mutex[END]);
-		if (philo->data->sig == STOP)
-			philo->sig = STOP;
-		pthread_mutex_unlock(&philo->data->mutex[END]);
+		check(philo, DEATH + SIGSTOP);
 	}
 }

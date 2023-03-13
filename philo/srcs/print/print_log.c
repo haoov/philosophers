@@ -16,16 +16,8 @@ void	print_log(char *log, t_philo *philo)
 {
 	int	time;
 
-	pthread_mutex_lock(&philo->data->mutex[PRINT]);
+	pthread_mutex_lock(&philo->data->mutex[LOG]);
 	time = timestamp() - philo->data->t0;
-	monitor(philo);
-	if (philo->dead && philo->sig != STOP)
-	{
-		printf("%d %d %s\n", time, philo->id, DEATH_LOG);
-		philo->sig = STOP;
-	}
-	if (philo->sig == CONTINUE)
-		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[PRINT]);
-
+	printf("%d %d %s\n", time, philo->id, log);
+	pthread_mutex_unlock(&philo->data->mutex[LOG]);
 }
