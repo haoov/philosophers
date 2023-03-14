@@ -12,6 +12,8 @@
 
 #include "philo.h"
 
+//FIXME: core dumped somewhere
+
 void	clean_forks(t_data data)
 {
 	int	i;

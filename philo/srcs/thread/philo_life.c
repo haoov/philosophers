@@ -31,9 +31,6 @@ static void	unlock_forks(t_philo *philo)
 /**
  * @brief taking forks and handling the one philo case.
 
- * * We delay the odd ones so that philos dont try to take 
- * * the same forks at the same time.
-
  * @param philo a struct sontainig the current philo's data
 */
 static void	lock_forks(t_philo *philo)
@@ -41,8 +38,8 @@ static void	lock_forks(t_philo *philo)
 	pthread_mutex_t	*fork1;
 	pthread_mutex_t	*fork2;
 
-	fork1 = &philo->data->forks[ft_min(philo->l_fork, philo->r_fork)];
-	fork2 = &philo->data->forks[ft_max(philo->l_fork, philo->r_fork)];
+	fork1 = &philo->data->forks[philo->l_fork];
+	fork2 = &philo->data->forks[philo->r_fork];
 	pthread_mutex_lock(fork1);
 	print_log(FORK_LOG, philo, NOFPRINT);
 	if (philo->l_fork == philo->r_fork)

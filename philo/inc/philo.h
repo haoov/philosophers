@@ -114,8 +114,6 @@ int		ft_atoi(const char *str);
 int		ft_strcmp(const char *a, const char *b);
 int		ft_strlen(char *str);
 int		only_digit(char *str);
-int		ft_min(int a, int b);
-int		ft_max(int a, int b);
 void	*ft_calloc(int nb, int size);
 
 void	print_log(char *log, t_philo *philo, t_signal flag);

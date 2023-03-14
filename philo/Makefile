@@ -35,8 +35,6 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/utils/only_digit.c\
 				  $(SRCDIR)/utils/ft_strlen.c\
 				  $(SRCDIR)/utils/ft_calloc.c\
-				  $(SRCDIR)/utils/ft_min.c\
-				  $(SRCDIR)/utils/ft_max.c\
 				  $(SRCDIR)/print/print_log.c\
 				  $(SRCDIR)/print/print_error.c\
 				  $(SRCDIR)/print/print_helper.c\
