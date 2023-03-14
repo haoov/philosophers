@@ -57,6 +57,7 @@ static void	init_philo(t_data *data)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
 		pthread_mutex_init(&data->philo[i].infos, NULL);
+		pthread_mutex_init(&data->philo[i].start, NULL);
 		data->philo[i].id = i + 1;
 		data->philo[i].r_fork = i;
 		if (i == 0)
@@ -74,7 +75,6 @@ static void	init_philo(t_data *data)
 int	init(t_data *data, int argc, char **argv)
 {
 	memset(data, 0, sizeof (t_data));
-	data->t0 = timestamp();
 	if (get_values(data, argc, argv) == FAILURE)
 		return (FAILURE);
 	data->philo = (t_philo *)ft_calloc(data->philo_nb, sizeof (t_philo));

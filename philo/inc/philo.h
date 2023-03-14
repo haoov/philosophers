@@ -42,9 +42,9 @@
 
 typedef enum e_check
 {
-	DEATH = 2,
-	FULL = 4,
-	SIGSTOP = 6
+	DEATH = 1,
+	FULL = 2,
+	SIGSTOP = 4
 }t_check;
 
 typedef enum e_state
@@ -56,7 +56,8 @@ typedef enum e_state
 typedef enum e_signal
 {
 	CONTINUE,
-	STOP
+	STOP,
+	PRINT_DEATH
 }t_signal;
 
 typedef enum e_mutex
@@ -82,6 +83,7 @@ typedef struct s_philo
 	int				r_fork;
 	bool			dead;
 	pthread_mutex_t	infos;
+	pthread_mutex_t	start;
 	t_time			time;
 	t_signal		sig;
 	struct s_data	*data;

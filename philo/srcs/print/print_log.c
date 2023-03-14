@@ -18,6 +18,11 @@ void	print_log(char *log, t_philo *philo)
 
 	pthread_mutex_lock(&philo->data->mutex[LOG]);
 	time = timestamp() - philo->data->t0;
-	printf("%d %d %s\n", time, philo->id, log);
+	if (!ft_strcmp(log, DEATH_LOG))
+		check(philo, DEATH);
+	else
+		check(philo, SIGSTOP);
+	if (philo->sig != STOP)
+		printf("%d %d %s\n", time, philo->id, log);
 	pthread_mutex_unlock(&philo->data->mutex[LOG]);
 }

@@ -20,7 +20,7 @@ DEPDIR			= $(PROJDIR)/dep
 
 #*************COMPILE*************#
 
-CC				= cc
+CC				= cc -g
 CFLAGS			= -Wall -Wextra -Werror
 DEBUG			= -g -fsanitize=thread
 INC				= -I $(HDDIR)

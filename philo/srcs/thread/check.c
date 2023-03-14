@@ -6,9 +6,12 @@ void	check_death(t_philo *philo)
 	if (philo->dead == true)
 	{
 		pthread_mutex_lock(&philo->data->mutex[END]);
+		if (philo->data->sig != STOP)
+			philo->sig = PRINT_DEATH;
+		else
+			philo->sig = STOP;
 		philo->data->sig = STOP;
 		pthread_mutex_unlock(&philo->data->mutex[END]);
-		philo->sig = STOP;
 	}
 	pthread_mutex_unlock(&philo->infos);
 }
@@ -28,7 +31,7 @@ void	check_full(t_philo *philo)
 
 void	check(t_philo *philo, t_check check)
 {
-	if (check == SIGSTOP || check == (SIGSTOP | DEATH) || check == (SIGSTOP | FULL))
+	if (check == SIGSTOP || check == (SIGSTOP | DEATH))
 	{
 		pthread_mutex_lock(&philo->data->mutex[END]);
 		if (philo->data->sig == STOP)
@@ -37,6 +40,6 @@ void	check(t_philo *philo, t_check check)
 	}
 	if (check == DEATH || check == (DEATH | SIGSTOP))
 		check_death(philo);
-	if (check == FULL || check == (FULL | SIGSTOP))
+	if (check == FULL)
 		check_full(philo);
 }
