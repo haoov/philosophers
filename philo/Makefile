@@ -20,7 +20,7 @@ DEPDIR			= $(PROJDIR)/dep
 
 #*************COMPILE*************#
 
-CC				= cc -g
+CC				= cc
 CFLAGS			= -Wall -Wextra -Werror
 DEBUG			= -g -fsanitize=thread
 INC				= -I $(HDDIR)
@@ -69,7 +69,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(PROGRESS)
 	@printf "$(NC)Linking $@...$(NC)\033[0K\n"
-	@$(CC) $(CFLAGS) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $@
 	$(DONE_PRINT)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c

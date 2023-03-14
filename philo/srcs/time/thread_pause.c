@@ -19,7 +19,7 @@ void	thread_pause(t_philo *philo, int time)
 	start = timestamp();
 	while (philo->sig == CONTINUE && timestamp() - start < time)
 	{
-		usleep(500);
-		check(philo, DEATH | SIGSTOP);
+		usleep(1000);
+		check(philo, SIGSTOP);
 	}
 }

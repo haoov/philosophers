@@ -42,22 +42,16 @@
 
 typedef enum e_check
 {
-	DEATH = 1,
-	FULL = 2,
-	SIGSTOP = 4
+	FULL = 1,
+	SIGSTOP = 2
 }t_check;
-
-typedef enum e_state
-{
-	ALIVE,
-	DEAD
-}t_state;
 
 typedef enum e_signal
 {
 	CONTINUE,
 	STOP,
-	PRINT_DEATH
+	FPRINT,
+	NOFPRINT
 }t_signal;
 
 typedef enum e_mutex
@@ -81,7 +75,6 @@ typedef struct s_philo
 	int				meal_count;
 	int				l_fork;
 	int				r_fork;
-	bool			dead;
 	pthread_mutex_t	infos;
 	pthread_mutex_t	start;
 	t_time			time;
@@ -121,11 +114,11 @@ int		ft_atoi(const char *str);
 int		ft_strcmp(const char *a, const char *b);
 int		ft_strlen(char *str);
 int		only_digit(char *str);
-int		ft_max(int a, int b);
 int		ft_min(int a, int b);
+int		ft_max(int a, int b);
 void	*ft_calloc(int nb, int size);
 
-void	print_log(char *log, t_philo *philo);
+void	print_log(char *log, t_philo *philo, t_signal flag);
 void	print_helper(void);
 void	print_error(char *error, char *infos);
 

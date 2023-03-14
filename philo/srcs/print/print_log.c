@@ -12,17 +12,14 @@
 
 #include "philo.h"
 
-void	print_log(char *log, t_philo *philo)
+void	print_log(char *log, t_philo *philo, t_signal sig)
 {
 	int	time;
 
 	pthread_mutex_lock(&philo->data->mutex[LOG]);
 	time = timestamp() - philo->data->t0;
-	if (!ft_strcmp(log, DEATH_LOG))
-		check(philo, DEATH);
-	else
-		check(philo, SIGSTOP);
-	if (philo->sig != STOP)
+	check(philo, SIGSTOP);
+	if (philo->sig == CONTINUE || sig == FPRINT)
 		printf("%d %d %s\n", time, philo->id, log);
 	pthread_mutex_unlock(&philo->data->mutex[LOG]);
 }

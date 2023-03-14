@@ -12,7 +12,12 @@
 
 #include "philo.h"
 
-void	unlock_forks(t_philo *philo)
+/**
+ * @brief unlocking the forks mutex.
+
+ * @param philo a struct sontainig the current philo's data
+*/
+static void	unlock_forks(t_philo *philo)
 {
 	if (philo->l_fork == philo->r_fork)
 		pthread_mutex_unlock(&philo->data->forks[philo->l_fork]);
@@ -23,46 +28,59 @@ void	unlock_forks(t_philo *philo)
 	}
 }
 
-void	lock_forks(t_philo *philo)
+/**
+ * @brief taking forks and handling the one philo case.
+
+ * * We delay the odd ones so that philos dont try to take 
+ * * the same forks at the same time.
+
+ * @param philo a struct sontainig the current philo's data
+*/
+static void	lock_forks(t_philo *philo)
 {
 	pthread_mutex_t	*fork1;
 	pthread_mutex_t	*fork2;
 
-	if (philo->id % 2 == 1)
-		usleep(5000);
 	fork1 = &philo->data->forks[ft_min(philo->l_fork, philo->r_fork)];
 	fork2 = &philo->data->forks[ft_max(philo->l_fork, philo->r_fork)];
 	pthread_mutex_lock(fork1);
-	print_log(FORK_LOG, philo);
+	print_log(FORK_LOG, philo, NOFPRINT);
 	if (philo->l_fork == philo->r_fork)
-	{
-		thread_pause(philo, philo->time.die - 1);
-		return (print_log(DEATH_LOG, philo));
-	}
+		return (thread_pause(philo, philo->time.die - 1));
 	pthread_mutex_lock(fork2);
-	print_log(FORK_LOG, philo);
+	print_log(FORK_LOG, philo, NOFPRINT);
 }
 
-void	philo_eat(t_philo *philo)
+/**
+ * @brief adding a meal to the philo's meal count
+ * and reseting the last meal value.
+
+ * @param philo a struct sontainig the current philo's data
+*/
+static void	philo_meal(t_philo *philo)
 {
 	lock_forks(philo);
 	if (philo->sig == STOP)
 		return (unlock_forks(philo));
-	print_log(EAT_LOG, philo);
+	print_log(EAT_LOG, philo, NOFPRINT);
 	pthread_mutex_lock(&philo->infos);
 	philo->last_meal = timestamp();
 	pthread_mutex_unlock(&philo->infos);
 	philo->meal_count++;
-	pthread_mutex_lock(&philo->data->mutex[COUNT]);
-	if (philo->meal_count == philo->data->max_meal)
-		philo->data->full_count++;
-	pthread_mutex_unlock(&philo->data->mutex[COUNT]);
 	check(philo, FULL);
 	thread_pause(philo, philo->time.eat);
-	print_log(SLEEP_LOG, philo);
+	print_log(SLEEP_LOG, philo, NOFPRINT);
 	unlock_forks(philo);
 }
 
+/**
+ * @brief thread routine for the philos. We create the monitor thread 
+ * and execute philos actions while no STOP signal is encounterd.
+
+ * * We delay the odd ones to prevent philos taking forks at the same time
+
+ //TODO: wait for the monitor thread to end
+*/
 void	*philo_life(void *arg)
 {
 	t_philo		*philo;
@@ -73,13 +91,15 @@ void	*philo_life(void *arg)
 		return (NULL);
 	pthread_detach(th_monitor);
 	pthread_mutex_lock(&philo->start);
+	if (philo->id % 2 == 1)
+		usleep(5000);
 	while (philo->sig == CONTINUE)
 	{
-		philo_eat(philo);
+		philo_meal(philo);
 		if (philo->sig == STOP)
 			break ;
 		thread_pause(philo, philo->time.sleep);
-		print_log(THINK_LOG, philo);
+		print_log(THINK_LOG, philo, NOFPRINT);
 	}
 	return (NULL);
 }

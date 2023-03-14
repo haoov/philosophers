@@ -1,24 +1,12 @@
 #include "philo.h"
 
-void	check_death(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->infos);
-	if (philo->dead == true)
-	{
-		pthread_mutex_lock(&philo->data->mutex[END]);
-		if (philo->data->sig != STOP)
-			philo->sig = PRINT_DEATH;
-		else
-			philo->sig = STOP;
-		philo->data->sig = STOP;
-		pthread_mutex_unlock(&philo->data->mutex[END]);
-	}
-	pthread_mutex_unlock(&philo->infos);
-}
+//[ ]: 42 header
 
 void	check_full(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->mutex[COUNT]);
+	if (philo->meal_count == philo->data->max_meal)
+		philo->data->full_count++;
 	if (philo->data->full_count == philo->data->philo_nb)
 	{
 		pthread_mutex_lock(&philo->data->mutex[END]);
@@ -31,15 +19,13 @@ void	check_full(t_philo *philo)
 
 void	check(t_philo *philo, t_check check)
 {
-	if (check == SIGSTOP || check == (SIGSTOP | DEATH))
+	if (check == SIGSTOP)
 	{
 		pthread_mutex_lock(&philo->data->mutex[END]);
 		if (philo->data->sig == STOP)
 			philo->sig = STOP;
 		pthread_mutex_unlock(&philo->data->mutex[END]);
 	}
-	if (check == DEATH || check == (DEATH | SIGSTOP))
-		check_death(philo);
 	if (check == FULL)
 		check_full(philo);
 }
