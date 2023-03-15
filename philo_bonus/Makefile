@@ -12,7 +12,7 @@ endif
 #*************PROJECT*************#
 
 PROJDIR			= $(realpath $(CURDIR))
-NAME			= philo
+NAME			= philo_bonus
 SRCDIR			= $(PROJDIR)/srcs
 HDDIR			= $(PROJDIR)/inc
 OBJDIR			= $(PROJDIR)/objs
@@ -22,7 +22,7 @@ DEPDIR			= $(PROJDIR)/dep
 
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror
-DEBUG			= -g -fsanitize=thread
+DEBUG			= -g -fsanitize=address
 INC				= -I $(HDDIR)
 
 #**************FILES**************#
@@ -40,12 +40,10 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/print/print_log.c\
 				  $(SRCDIR)/print/print_error.c\
 				  $(SRCDIR)/print/print_helper.c\
-				  $(SRCDIR)/thread/threads.c\
-				  $(SRCDIR)/thread/philo_life.c\
-				  $(SRCDIR)/thread/check.c\
-				  $(SRCDIR)/thread/monitor.c\
+				  $(SRCDIR)/process/process.c\
+				  $(SRCDIR)/process/philo_life.c\
 				  $(SRCDIR)/time/timestamp.c\
-				  $(SRCDIR)/time/thread_pause.c
+				  $(SRCDIR)/time/process_pause.c
 HD				= $(HDDIR)/philo.h
 OBJS			= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRCS:.c=.o))
 DEPS			= $(patsubst $(SRCDIR)/%,$(DEPDIR)/%,$(SRCS:.c=.d))

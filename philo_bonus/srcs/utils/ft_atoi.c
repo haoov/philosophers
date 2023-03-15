@@ -1,25 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_log.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:54:42 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:28:40 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 12:40:34 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 12:40:35 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	print_log(char *log, t_philo *philo, t_signal sig)
+int	ft_atoi(const char *str)
 {
-	int	time;
+	int	i;
+	int	num;
+	int	sign;
 
-	pthread_mutex_lock(&philo->data->mutex[LOG]);
-	time = timestamp() - philo->data->t0;
-	check(philo, SIGSTOP);
-	if (philo->sig == CONTINUE || sig == FPRINT)
-		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[LOG]);
+	i = 0;
+	num = 0;
+	sign = 1;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -sign;
+		i++;
+	}
+	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
+	{
+		num = num * 10 + (str[i] - 48);
+		i++;
+	}
+	return (num * sign);
 }

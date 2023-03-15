@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 14:08:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/09 15:27:45 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/15 11:25:34 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,33 +24,21 @@ static void	thread_join(t_data *data, int th_nb)
 	}
 }
 
-static void	thread_start(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	data->t0 = timestamp();
-	while (i < data->philo_nb)
-	{
-		pthread_mutex_unlock(&data->philo[i].start);
-		i++;
-	}
-}
-
 int	threads(t_data *data)
 {
 	int	i;
 
 	i = 0;
+	pthread_mutex_lock(&data->mutex[START]);
 	while (i < data->philo_nb)
 	{
-		pthread_mutex_lock(&data->philo[i].start);
 		if (pthread_create(&data->philo[i].th, NULL,
 				philo_life, &data->philo[i]) != 0)
 			return (thread_join(data, i), FAILURE);
 		i++;
 	}
-	thread_start(data);
+	data->t0 = timestamp();
+	pthread_mutex_unlock(&data->mutex[START]);
 	thread_join(data, i);
 	return (SUCCESS);
 }

@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_log.c                                        :+:      :+:    :+:   */
+/*   process_pause.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:54:42 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:28:40 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 13:47:30 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 13:47:31 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	print_log(char *log, t_philo *philo, t_signal sig)
+void	process_pause(t_philo *philo, int time)
 {
-	int	time;
+	int	start;
 
-	pthread_mutex_lock(&philo->data->mutex[LOG]);
-	time = timestamp() - philo->data->t0;
-	check(philo, SIGSTOP);
-	if (philo->sig == CONTINUE || sig == FPRINT)
-		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[LOG]);
+	(void)philo;
+	start = timestamp();
+	while (timestamp() - start < time)
+		usleep(1000);
 }

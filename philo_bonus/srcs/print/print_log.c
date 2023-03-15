@@ -5,21 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:54:42 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:28:40 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 11:50:18 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 18:58:17 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	print_log(char *log, t_philo *philo, t_signal sig)
+void	print_log(char *log, t_philo *philo)
 {
 	int	time;
+	int	status;
 
-	pthread_mutex_lock(&philo->data->mutex[LOG]);
-	time = timestamp() - philo->data->t0;
-	check(philo, SIGSTOP);
-	if (philo->sig == CONTINUE || sig == FPRINT)
+	sem_wait(philo->data->print);
+	time = timestamp() - philo->data->time.t0;
+	waitpid(-1, &status, 0);
+	if (WEXITSTATUS(status) != DEAD)
 		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[LOG]);
+	sem_post(philo->data->print);
 }

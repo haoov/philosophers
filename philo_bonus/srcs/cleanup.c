@@ -1,25 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_log.c                                        :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:54:42 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:28:40 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 11:54:55 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 18:51:11 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	print_log(char *log, t_philo *philo, t_signal sig)
+void	clean_philo(t_data *data)
 {
-	int	time;
+	int	i;
 
-	pthread_mutex_lock(&philo->data->mutex[LOG]);
-	time = timestamp() - philo->data->t0;
-	check(philo, SIGSTOP);
-	if (philo->sig == CONTINUE || sig == FPRINT)
-		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[LOG]);
+	i = 0;
+	while (i < data->philo_nb)
+	{
+		pthread_mutex_destroy(&data->philo[i].infos);
+		i++;
+	}
+	free(data->philo);
+	data->philo = NULL;
+}
+
+void	cleanup(t_data *data)
+{
+	if (data->philo)
+		clean_philo(data);
+	sem_close(data->forks);
+	sem_close(data->count);
+	sem_close(data->print);
+	sem_unlink(FORKS);
+	sem_unlink(COUNT);
+	sem_unlink(PRINT);
 }

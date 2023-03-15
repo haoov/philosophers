@@ -6,20 +6,17 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 12:37:23 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/09 16:05:17 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:57:43 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-//FIXME: core dumped somewhere
 
 void	clean_forks(t_data data)
 {
 	int	i;
 
 	i = 0;
-
 	while (i < data.philo_nb)
 	{
 		pthread_mutex_destroy(&data.forks[i]);
@@ -28,12 +25,26 @@ void	clean_forks(t_data data)
 	free(data.forks);
 }
 
+void	clean_philo(t_data data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data.philo_nb)
+	{
+		pthread_mutex_destroy(&data.philo[i].infos);
+		i++;
+	}
+	free(data.philo);
+}
+
 void	cleanup(t_data data)
 {
 	if (data.philo)
-		free(data.philo);
+		clean_philo(data);
 	if (data.forks)
 		clean_forks(data);
+	pthread_mutex_destroy(&data.mutex[START]);
 	pthread_mutex_destroy(&data.mutex[LOG]);
 	pthread_mutex_destroy(&data.mutex[END]);
 	pthread_mutex_destroy(&data.mutex[COUNT]);

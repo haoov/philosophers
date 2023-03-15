@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 10:37:35 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 09:58:39 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 11:08:04 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 18:49:12 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 static int	check_args(int argc, char **argv)
 {
@@ -55,17 +55,8 @@ static void	init_philo(t_data *data)
 	i = 0;
 	while (i < data->philo_nb)
 	{
-		pthread_mutex_init(&data->forks[i], NULL);
 		pthread_mutex_init(&data->philo[i].infos, NULL);
 		data->philo[i].id = i + 1;
-		data->philo[i].r_fork = i;
-		if (i == 0)
-			data->philo[i].l_fork = data->philo_nb - 1;
-		else
-			data->philo[i].l_fork = i - 1;
-		data->philo[i].time.die = data->time.die;
-		data->philo[i].time.eat = data->time.eat;
-		data->philo[i].time.sleep = data->time.sleep;
 		data->philo[i].data = data;
 		i++;
 	}
@@ -79,14 +70,11 @@ int	init(t_data *data, int argc, char **argv)
 	data->philo = (t_philo *)ft_calloc(data->philo_nb, sizeof (t_philo));
 	if (data->philo == NULL)
 		return (print_error(MALLOC_ERR, "init.c:54"), FAILURE);
-	data->forks = (pthread_mutex_t *)ft_calloc(data->philo_nb,
-			sizeof (pthread_mutex_t));
-	if (data->forks == NULL)
-		return (print_error(MALLOC_ERR, "init.c:57"), FAILURE);
-	pthread_mutex_init(&data->mutex[START], NULL);
-	pthread_mutex_init(&data->mutex[LOG], NULL);
-	pthread_mutex_init(&data->mutex[COUNT], NULL);
-	pthread_mutex_init(&data->mutex[END], NULL);
+	data->forks = sem_open(FORKS, O_CREAT, 0777, data->philo_nb);
+	data->count = sem_open(COUNT, O_CREAT, 0777, 0);
+	data->print = sem_open(PRINT, O_CREAT, 0777, 1);
+	if (data->forks == SEM_FAILED || data->count == SEM_FAILED)
+		return (print_error(SEM_ERR, "init.c"), FAILURE);
 	init_philo(data);
 	return (SUCCESS);
 }

@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_log.c                                        :+:      :+:    :+:   */
+/*   ft_max.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:54:42 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:28:40 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 10:22:18 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 10:22:46 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	print_log(char *log, t_philo *philo, t_signal sig)
+int	ft_max(int a, int b)
 {
-	int	time;
-
-	pthread_mutex_lock(&philo->data->mutex[LOG]);
-	time = timestamp() - philo->data->t0;
-	check(philo, SIGSTOP);
-	if (philo->sig == CONTINUE || sig == FPRINT)
-		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[LOG]);
+	if (a >= b)
+		return (a);
+	return (b);
 }

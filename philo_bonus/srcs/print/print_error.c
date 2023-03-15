@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_log.c                                        :+:      :+:    :+:   */
+/*   print_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:54:42 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:28:40 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/15 11:48:09 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/15 11:48:10 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	print_log(char *log, t_philo *philo, t_signal sig)
+void	print_error(char *error, char *infos)
 {
-	int	time;
-
-	pthread_mutex_lock(&philo->data->mutex[LOG]);
-	time = timestamp() - philo->data->t0;
-	check(philo, SIGSTOP);
-	if (philo->sig == CONTINUE || sig == FPRINT)
-		printf("%d %d %s\n", time, philo->id, log);
-	pthread_mutex_unlock(&philo->data->mutex[LOG]);
+	write(2, "philo: ", 7);
+	write(2, error, ft_strlen(error));
+	if (infos)
+	{
+		write(2, ": ", 2);
+		write(2, infos, ft_strlen(infos));
+	}
+	write(2, "\n", 1);
+	if (!ft_strcmp(error, ARG_ERR) || !ft_strcmp(error, ARGN_ERR))
+		write(2, "try 'philo --help' for more informations\n", 41);
 }

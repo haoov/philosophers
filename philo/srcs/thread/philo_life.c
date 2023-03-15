@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 14:14:07 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/09 19:45:45 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/15 11:23:55 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ static void	lock_forks(t_philo *philo)
 	pthread_mutex_t	*fork1;
 	pthread_mutex_t	*fork2;
 
-	fork1 = &philo->data->forks[philo->l_fork];
-	fork2 = &philo->data->forks[philo->r_fork];
+	fork1 = &philo->data->forks[ft_min(philo->l_fork, philo->r_fork)];
+	fork2 = &philo->data->forks[ft_max(philo->l_fork, philo->r_fork)];
 	pthread_mutex_lock(fork1);
 	print_log(FORK_LOG, philo, NOFPRINT);
 	if (philo->l_fork == philo->r_fork)
@@ -76,7 +76,7 @@ static void	philo_meal(t_philo *philo)
 
  * * We delay the odd ones to prevent philos taking forks at the same time
 
- //TODO: wait for the monitor thread to end
+ * @param arg the philosopher's data
 */
 void	*philo_life(void *arg)
 {
@@ -86,8 +86,8 @@ void	*philo_life(void *arg)
 	philo = (t_philo *)arg;
 	if (pthread_create(&th_monitor, NULL, monitor, philo) != 0)
 		return (NULL);
-	pthread_detach(th_monitor);
-	pthread_mutex_lock(&philo->start);
+	pthread_mutex_lock(&philo->data->mutex[START]);
+	pthread_mutex_unlock(&philo->data->mutex[START]);
 	if (philo->id % 2 == 1)
 		usleep(5000);
 	while (philo->sig == CONTINUE)
@@ -98,5 +98,6 @@ void	*philo_life(void *arg)
 		thread_pause(philo, philo->time.sleep);
 		print_log(THINK_LOG, philo, NOFPRINT);
 	}
+	pthread_join(th_monitor, NULL);
 	return (NULL);
 }
