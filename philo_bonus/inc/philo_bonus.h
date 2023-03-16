@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:06:27 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 18:49:24 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/16 17:14:57 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,19 @@
 # define EAT_LOG	"is eating"
 # define FORK_LOG	"has taken a fork"
 
-# define FORKS		"forks_semaphore"
-# define PRINT		"print_semaphore"
-# define COUNT		"count_semaphore"
+# define SEM_FORKS	"forks_semaphore"
+# define SEM_STOP	"stop_semaphore"
+# define SEM_COUNT	"count_semaphore"
+# define SEM_PRINT	"print_semaphore"
+# define STOP		1
 # define DEAD		2
-# define FULL		3
 
 /********ENUM AND STRUCT********/
 
 typedef enum e_signal
 {
-	CONTINUE,
-	STOP
+	UNLOCK,
+	LOCK
 }t_signal;
 
 typedef struct s_time
@@ -74,8 +75,6 @@ typedef struct s_philo
 	int				id;
 	int				last_meal;
 	int				meal_count;
-	bool			stop;
-	t_signal		sig;
 	pthread_mutex_t	infos;
 	struct s_data	*data;
 	pid_t			pid;
@@ -89,33 +88,31 @@ typedef struct s_data
 	sem_t			*forks;
 	sem_t			*count;
 	sem_t			*print;
+	sem_t			*stop;
 	t_time			time;
 	t_philo			*philo;
-	pid_t			full;
 }t_data;
 
 /********DECLARATION*********/
 
-int			init(t_data *data, int argc, char **argv);
+int		init(t_data *data, int argc, char **argv);
 
-int			process(t_data *data);
-int			philo_life(t_data *data, int i);
+int		philo_start(t_data *data);
+void	philo_life(t_philo *philo);
 
-int			timestamp(void);
-void		process_pause(t_philo *philo, int time);
+int		timestamp(void);
+void	process_pause(t_philo *philo, int time);
 
-void		cleanup(t_data *data);
+void	cleanup(t_data *data);
 
-int			ft_atoi(const char *str);
-int			ft_strcmp(const char *a, const char *b);
-int			ft_strlen(char *str);
-int			only_digit(char *str);
-int			ft_max(int a, int b);
-int			ft_min(int a, int b);
-void		*ft_calloc(int nb, int size);
+int		ft_atoi(const char *str);
+int		ft_strcmp(const char *a, const char *b);
+int		ft_strlen(char *str);
+int		only_digit(char *str);
+void	*ft_calloc(int nb, int size);
 
-void		print_log(char *log, t_philo *philo);
-void		print_helper(void);
-void		print_error(char *error, char *infos);
+void	print_log(char *log, t_philo *philo, t_signal sig);
+void	print_helper(void);
+int		print_error(char *error, char *infos);
 
 #endif

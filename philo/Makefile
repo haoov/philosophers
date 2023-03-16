@@ -1,14 +1,3 @@
-#************PROGRESS*************#
-
-ifndef PROGRESS
-T := $(shell $(MAKE) $(MAKECMDGOALS) --no-print-directory \
-      -nrRf $(firstword $(MAKEFILE_LIST)) \
-      PROGRESS="COUNTTHIS" | grep -c "COUNTTHIS")
-N := x
-C = $(words $N)$(eval N := x $N)
-PROGRESS = @printf "[%s/%s]\t\033[0K" $C $T
-endif
-
 #*************PROJECT*************#
 
 PROJDIR			= $(realpath $(CURDIR))
@@ -67,7 +56,7 @@ DONE_PRINT		= @printf "$(GREEN)Done !$(NC)\n"
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	$(PROGRESS)
+	$(DONE_PRINT)
 	@printf "$(NC)Linking $@...$(NC)\033[0K\n"
 	@$(CC) $(CFLAGS) $(OBJS) -o $@
 	$(DONE_PRINT)
@@ -76,8 +65,7 @@ $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	@mkdir -p $(patsubst $(OBJDIR)/%,$(DEPDIR)/%,$(dir $@))
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@ -MMD -MF $(DEP_FILE)
-	$(PROGRESS)
-	@printf "$(GREEN)Building $(notdir $@)$(NC)\n"
+	@printf "$(NC)Building $(notdir $@)$(NC)\n"
 
 -include $(DEPS)
 

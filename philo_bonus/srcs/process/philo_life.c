@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 12:39:08 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 19:00:49 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/16 17:23:30 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,51 +14,66 @@
 
 void	*monitor(void *arg)
 {
-	bool	stop;
-	int		status;
 	t_philo	*philo;
+	bool	dead;
 
-	stop = false;
 	philo = (t_philo *)arg;
-	philo->last_meal = philo->data->time.t0;
-	if (philo->id == 1)
-		(cleanup(philo->data), exit(DEAD));
-	while (stop == false)
+	dead = false;
+	while (dead == false)
 	{
 		pthread_mutex_lock(&philo->infos);
 		if (timestamp() - philo->last_meal >= philo->data->time.die)
 		{
-			philo->stop = true;
-			print_log(DEATH_LOG, philo);
-			stop = true;
+			print_log(DEATH_LOG, philo, LOCK);
+			sem_post(philo->data->stop);
+			dead = true;
 		}
 		pthread_mutex_unlock(&philo->infos);
-		if (stop)
-			(cleanup(philo->data), exit(DEAD));
-		waitpid(-1, &status, 0);
-		if (WEXITSTATUS(status) == DEAD)
-		{
-			stop = true;
-			pthread_mutex_lock(&philo->infos);
-			philo->stop = true;
-			pthread_mutex_unlock(&philo->infos);
-		}
+		usleep(5000);
 	}
 	return (NULL);
 }
 
-int	philo_life(t_data *data, int i)
+void	philo_full(t_philo *philo)
+{
+	philo->meal_count++;
+	if (philo->meal_count == philo->data->max_meal)
+		sem_post(philo->data->count);
+}
+
+void	philo_meal(t_philo *philo)
+{
+	sem_wait(philo->data->forks);
+	print_log(FORK_LOG, philo, UNLOCK);
+	sem_wait(philo->data->forks);
+	print_log(FORK_LOG, philo, UNLOCK);
+	pthread_mutex_lock(&philo->infos);
+	philo->last_meal = timestamp();
+	pthread_mutex_unlock(&philo->infos);
+	philo_full(philo);
+	print_log(EAT_LOG, philo, UNLOCK);
+	process_pause(philo, philo->data->time.eat);
+	print_log(SLEEP_LOG, philo, UNLOCK);
+	sem_post(philo->data->forks);
+	sem_post(philo->data->forks);
+}
+
+void	philo_life(t_philo *philo)
 {
 	pthread_t	th_monitor;
 
-	if (pthread_create(&th_monitor, NULL, monitor, &data->philo[i]) != 0)
-		(cleanup(data), exit(FAILURE));
-	while (data->philo[i].sig == CONTINUE)
+	philo->last_meal = philo->data->time.t0;
+	if (philo->id % 2 == 1)
+		usleep(5000);
+	if (pthread_create(&th_monitor, NULL, monitor, philo) != 0)
 	{
-		//eat
-		//sleep
-		//think
+		cleanup(philo->data);
+		exit(print_error(THREAD_ERR, "philo_life.c:69"));
 	}
-	cleanup(data);
-	exit(DEAD);
+	while (philo)
+	{
+		philo_meal(philo);
+		process_pause(philo, philo->data->time.sleep);
+		print_log(THINK_LOG, philo, UNLOCK);
+	}
 }

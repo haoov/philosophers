@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:06:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 16:57:01 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/16 16:31:58 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 		return (print_helper(), FAILURE);
 	if (init(&data, argc, argv) == FAILURE)
 		return (cleanup(&data), FAILURE);
-	if (process(&data) == FAILURE)
+	if (philo_start(&data) == FAILURE)
 		return (cleanup(&data), FAILURE);
 	return (cleanup(&data), SUCCESS);
 }
