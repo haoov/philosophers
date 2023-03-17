@@ -24,8 +24,6 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/utils/only_digit.c\
 				  $(SRCDIR)/utils/ft_strlen.c\
 				  $(SRCDIR)/utils/ft_calloc.c\
-				  $(SRCDIR)/utils/ft_max.c\
-				  $(SRCDIR)/utils/ft_min.c\
 				  $(SRCDIR)/print/print_log.c\
 				  $(SRCDIR)/print/print_error.c\
 				  $(SRCDIR)/print/print_helper.c\
@@ -38,8 +36,6 @@ SRCS			= $(SRCDIR)/main.c\
 HD				= $(HDDIR)/philo.h
 OBJS			= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRCS:.c=.o))
 DEPS			= $(patsubst $(SRCDIR)/%,$(DEPDIR)/%,$(SRCS:.c=.d))
-#Only for implicit building rule
-DEP_FILE		= $(patsubst $(OBJDIR)/%,$(DEPDIR)/%,$(@:.o=.d))
 
 #**************COLORS*************#
 
@@ -58,13 +54,14 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(DONE_PRINT)
 	@printf "$(NC)Linking $@...$(NC)\033[0K\n"
-	@$(CC) $(CFLAGS) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $@
 	$(DONE_PRINT)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	@mkdir -p $(patsubst $(OBJDIR)/%,$(DEPDIR)/%,$(dir $@))
-	@$(CC) $(CFLAGS) $(INC) -c $< -o $@ -MMD -MF $(DEP_FILE)
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@ \
+		-MMD -MF $(patsubst $(OBJDIR)/%,$(DEPDIR)/%,$(@:.o=.d))
 	@printf "$(NC)Building $(notdir $@)$(NC)\n"
 
 -include $(DEPS)

@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 14:08:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:25:34 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/17 12:10:26 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@ static void	thread_join(t_data *data, int th_nb)
 	int	i;
 
 	i = 0;
+	if (th_nb < data->philo_nb)
+	{
+		data->t0 = timestamp();
+		pthread_mutex_unlock(&data->mutex[START]);
+		pthread_mutex_lock(&data->mutex[END]);
+		data->stop = true;
+		pthread_mutex_unlock(&data->mutex[END]);
+		print_error(THREAD_ERR, "threads.c");
+	}
 	while (i < th_nb)
 	{
 		pthread_join(data->philo[i].th, NULL);

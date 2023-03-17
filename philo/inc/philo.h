@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 14:16:00 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 10:57:51 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/17 12:09:57 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define ARG_ERR	"Invalid argument"
 # define ARGN_ERR	"Invalid number of arguments"
 # define MALLOC_ERR	"Malloc failed"
+# define THREAD_ERR	"pthread_create failed"
 
 # define DEATH_LOG	"died"
 # define THINK_LOG	"is thinking"
@@ -48,8 +49,6 @@ typedef enum e_check
 
 typedef enum e_signal
 {
-	CONTINUE,
-	STOP,
 	FPRINT,
 	NOFPRINT
 }t_signal;
@@ -76,9 +75,10 @@ typedef struct s_philo
 	int				meal_count;
 	int				l_fork;
 	int				r_fork;
-	pthread_mutex_t	infos;
+	bool			stop;
 	t_time			time;
-	t_signal		sig;
+	pthread_mutex_t	infos;
+	pthread_mutex_t	sync;
 	struct s_data	*data;
 	pthread_t		th;
 }t_philo;
@@ -89,8 +89,8 @@ typedef struct s_data
 	int				max_meal;
 	int				full_count;
 	int				t0;
+	bool			stop;
 	t_time			time;
-	t_signal		sig;
 	pthread_mutex_t	mutex[4];
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
@@ -103,7 +103,7 @@ int			init(t_data *data, int argc, char **argv);
 int			threads(t_data *data);
 void		*philo_life(void *arg);
 void		*monitor(void *arg);
-t_signal	check(t_philo *philo, t_check check);
+void		check(t_philo *philo, t_check check);
 
 int			timestamp(void);
 void		thread_pause(t_philo *philo, int time);
@@ -114,8 +114,6 @@ int			ft_atoi(const char *str);
 int			ft_strcmp(const char *a, const char *b);
 int			ft_strlen(char *str);
 int			only_digit(char *str);
-int			ft_max(int a, int b);
-int			ft_min(int a, int b);
 void		*ft_calloc(int nb, int size);
 
 void		print_log(char *log, t_philo *philo, t_signal flag);

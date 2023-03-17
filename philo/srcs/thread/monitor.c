@@ -6,25 +6,25 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 10:00:37 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 11:30:50 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/17 12:07:11 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	philo_death(t_philo *philo, bool *stop)
+static void	philo_death(t_philo *philo, bool *dead)
 {
 	t_signal	sig;
 
 	pthread_mutex_lock(&philo->data->mutex[END]);
-	if (philo->data->sig == STOP)
+	if (philo->data->stop)
 		sig = NOFPRINT;
 	else
 		sig = FPRINT;
-	philo->data->sig = STOP;
+	philo->data->stop = true;
 	pthread_mutex_unlock(&philo->data->mutex[END]);
 	print_log(DEATH_LOG, philo, sig);
-	*stop = true;
+	*dead = true;
 }
 
 /**
@@ -35,16 +35,17 @@ static void	philo_death(t_philo *philo, bool *stop)
 void	*monitor(void *arg)
 {
 	t_philo	*philo;
-	bool	stop;
+	bool	dead;
 
 	philo = (t_philo *)arg;
-	philo->last_meal = philo->data->t0;
-	stop = false;
-	while (stop == false)
+	pthread_mutex_lock(&philo->sync);
+	pthread_mutex_unlock(&philo->sync);
+	dead = false;
+	while (dead == false)
 	{
 		pthread_mutex_lock(&philo->infos);
 		if (timestamp() - philo->last_meal >= philo->time.die)
-			philo_death(philo, &stop);
+			philo_death(philo, &dead);
 		pthread_mutex_unlock(&philo->infos);
 		usleep(5000);
 	}

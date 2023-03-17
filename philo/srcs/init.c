@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:37:35 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 09:58:39 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/17 10:11:33 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	init_philo(t_data *data)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
 		pthread_mutex_init(&data->philo[i].infos, NULL);
+		pthread_mutex_init(&data->philo[i].sync, NULL);
 		data->philo[i].id = i + 1;
 		data->philo[i].r_fork = i;
 		if (i == 0)
