@@ -33,7 +33,7 @@ static int	get_values(t_data *data, int argc, char **argv)
 	if (check_args(argc, argv) == FAILURE)
 		return (FAILURE);
 	data->philo_nb = ft_atoi(argv[1]);
-	if (data->philo_nb == 0)
+	if (data->philo_nb == 0 || data->philo_nb > 200)
 		return (print_error(ARG_ERR, argv[1]), FAILURE);
 	data->time.die = ft_atoi(argv[2]);
 	data->time.eat = ft_atoi(argv[3]);

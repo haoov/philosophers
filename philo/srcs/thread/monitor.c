@@ -12,6 +12,20 @@
 
 #include "philo.h"
 
+/**
+ * @brief handling the philo's death. 
+ * 
+ * Using the END mutex, we put the data.stop value to true so 
+ * that others philo stop.
+ * 
+ * If the data.stop value is already true then we send NOFPRINT 
+ * (no force print) to print_Log() and the DEATH_LOG wont be printed.
+ * FPRINT (force print) tells print_log() to print even if the 
+ * data.stop value is true so that the DEATH_LOG can be printed.
+ * 
+ * @param philo a pointer to a truct containing the philo's data.
+ * @param dead a pointer to a bool representing the philo's death.
+*/
 static void	philo_death(t_philo *philo, bool *dead)
 {
 	t_signal	sig;
@@ -28,8 +42,14 @@ static void	philo_death(t_philo *philo, bool *dead)
 }
 
 /**
- * @brief monitoring the philo to check if he is dead or not
-
+ * @brief monitoring the philo to check if he is dead or not.
+ * 
+ * The sync mutex is used to sync the monitor thread with his 
+ * corresponding philo_life thread. (see philo_life.c)
+ * The infos mutex protects the last_meal value.
+ * We wait 5ms so that the thread is not always trying to lock 
+ * the infos mutex resulting in possible speed lost.
+ * 
  * @param arg The philosophers data
 */
 void	*monitor(void *arg)

@@ -20,6 +20,6 @@ void	thread_pause(t_philo *philo, int time)
 	while (philo->stop == false && timestamp() - start < time)
 	{
 		usleep(1000);
-		check(philo, SIGSTOP);
+		check(philo, STOP);
 	}
 }

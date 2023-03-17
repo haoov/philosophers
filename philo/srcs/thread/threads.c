@@ -12,6 +12,16 @@
 
 #include "philo.h"
 
+/**
+ * @brief wait for the threads to finish.
+ * 
+ * If th_nb is less than data.philo_nb it means pthread_create has failed. 
+ * We then need to launch the threads using START mutex and put data.stop 
+ * value to true to stop them using the END mutex.
+ * 
+ * @param data a pointer to the main data struct.
+ * @param th_nb the number of threads that have been created.
+*/
 static void	thread_join(t_data *data, int th_nb)
 {
 	int	i;
@@ -33,6 +43,14 @@ static void	thread_join(t_data *data, int th_nb)
 	}
 }
 
+/**
+ * @brief create all the philo_life threads and sync them.
+ * 
+ * The START mutex is used to sync all threads.
+ * If pthread_create fails we wait the others before exiting.
+ * 
+ * @param data a pointer to the main data struct.
+*/
 int	threads(t_data *data)
 {
 	int	i;

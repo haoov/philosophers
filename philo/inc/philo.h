@@ -43,8 +43,8 @@
 
 typedef enum e_check
 {
-	FULL = 1,
-	SIGSTOP = 2
+	FULL,
+	STOP
 }t_check;
 
 typedef enum e_signal

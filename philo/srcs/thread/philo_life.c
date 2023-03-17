@@ -15,7 +15,7 @@
 /**
  * @brief unlocking the forks mutex.
 
- * @param philo a struct sontainig the current philo's data
+ * @param philo a pointer to a struct containing the philo's data.
 */
 static void	unlock_forks(t_philo *philo)
 {
@@ -33,7 +33,7 @@ static void	unlock_forks(t_philo *philo)
  * 
  * We use a lock order to prevent deadlocks.
  * 
- * @param philo a struct sontainig the current philo's data
+ * @param philo a pointer to a struct containing the philo's data.
 */
 static void	lock_forks(t_philo *philo)
 {
@@ -53,8 +53,11 @@ static void	lock_forks(t_philo *philo)
 /**
  * @brief adding a meal to the philo's meal count
  * and reseting the last meal value.
-
- * @param philo a struct sontainig the current philo's data
+ * 
+ * The "last_meal" variable is shared with the th_monitor thread 
+ * so we have to protect it with a mutex (infos).
+ * 
+ * @param philo a pointer to a struct containing the philo's data.
 */
 static void	philo_meal(t_philo *philo)
 {
@@ -72,6 +75,21 @@ static void	philo_meal(t_philo *philo)
 	unlock_forks(philo);
 }
 
+/**
+ * @brief function to sync the philo and his th_monitor thread 
+ * with the main thread.
+ * 
+ * We lock the sync mutex to block the th_monitor thread.
+ * We block the philo_life thread by trying to unlock the START 
+ * mutex (wich is locked by the main thread).
+ * When the main thread unlock the START mutex the thread can resume 
+ * and unlock the sync mutex so that the th_monitor thread can start.
+ * Finally we unlock the START mutex so that all the other 
+ * threads can do the same.
+ * 
+ * @param philo a pointer to a struct containing the philo's data.
+ * @param th_monitor a pointer to a pthread_t struct for the monitor thread.
+*/
 int	sync_start(t_philo *philo, pthread_t *th_monitor)
 {
 	pthread_mutex_lock(&philo->sync);
@@ -88,12 +106,17 @@ int	sync_start(t_philo *philo, pthread_t *th_monitor)
 }
 
 /**
- * @brief thread routine for the philos. We create the monitor thread 
- * and execute philos actions while no STOP signal is encounterd.
-
- * * We delay the odd ones to prevent philos taking forks at the same time
-
- * @param arg the philosopher's data
+ * @brief thread routine for the philos.
+ * 
+ * We sync the thread and his th_monitor thread with the main thread then 
+ * while the philo.stop value is false we execute the actions 
+ * (eat sleep think).
+ * * We delay the odd ones to prevent philos taking forks at the same time.
+ * * 5000 (5ms) is an arbitrary value. It took about 4ms to launch 100 
+ * * threads on my (slow) home computer so i had to wait more than that 
+ * * to handle 200 (max philo_nb value).
+ * 
+ * @param arg a pointer to a struct containing the philo's data.
 */
 void	*philo_life(void *arg)
 {
