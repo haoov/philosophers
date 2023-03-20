@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 10:01:07 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/17 10:40:10 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 08:37:21 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	check_full(t_philo *philo)
 
 void	check(t_philo *philo, t_check check)
 {
-	if (check == SIGSTOP)
+	if (check == STOP)
 	{
 		pthread_mutex_lock(&philo->data->mutex[END]);
 		if (philo->data->stop)

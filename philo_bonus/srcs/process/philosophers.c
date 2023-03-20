@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 11:17:38 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/16 17:49:45 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 10:47:00 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,14 @@ void	*check_full(void *arg)
 	i = 0;
 	while (i < data->philo_nb)
 	{
-		if (waitpid(-1, 0, WNOHANG) != 0)
+		if (waitpid(-1, 0, WNOHANG) > 0)
 			break ;
 		if (data->max_meal > 0)
 		{
 			sem_wait(data->count);
 			i++;
 		}
+		usleep(1000);
 	}
 	if (i == data->philo_nb)
 		sem_post(data->stop);
@@ -50,16 +51,17 @@ void	*check_full(void *arg)
 int	main_monitor(t_data *data)
 {
 	pthread_t	th_check_full;
-	int			status;
 
 	if (pthread_create(&th_check_full, NULL, check_full, data) != 0)
-		return (kill_all(data), print_error(THREAD_ERR, NULL));
-	if (waitpid(-1, &status, WNOHANG) == 0)
+	{
+		kill_all(data);
+		return (print_error(THREAD_ERR, NULL));
+	}
+	if (waitpid(-1, 0, WNOHANG) == 0)
 		sem_wait(data->stop);
 	kill_all(data);
+	sem_post(data->count);
 	pthread_join(th_check_full, NULL);
-	if (WEXITSTATUS(status) == FAILURE)
-		return (FAILURE);
 	return (SUCCESS);
 }
 

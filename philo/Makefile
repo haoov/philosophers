@@ -54,7 +54,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(DONE_PRINT)
 	@printf "$(NC)Linking $@...$(NC)\033[0K\n"
-	@$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) -o $@
 	$(DONE_PRINT)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c

@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 14:16:00 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/17 12:09:57 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 10:16:17 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 # define SUCCESS	0
 # define FAILURE	1
+# define FAILED		"Failed"
 # define HELP		"--help"
 # define ARG_ERR	"Invalid argument"
 # define ARGN_ERR	"Invalid number of arguments"
@@ -55,7 +56,6 @@ typedef enum e_signal
 
 typedef enum e_mutex
 {
-	START,
 	LOG,
 	COUNT,
 	END
@@ -78,7 +78,6 @@ typedef struct s_philo
 	bool			stop;
 	t_time			time;
 	pthread_mutex_t	infos;
-	pthread_mutex_t	sync;
 	struct s_data	*data;
 	pthread_t		th;
 }t_philo;
@@ -91,7 +90,7 @@ typedef struct s_data
 	int				t0;
 	bool			stop;
 	t_time			time;
-	pthread_mutex_t	mutex[4];
+	pthread_mutex_t	mutex[3];
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
 }t_data;
@@ -106,7 +105,7 @@ void		*monitor(void *arg);
 void		check(t_philo *philo, t_check check);
 
 int			timestamp(void);
-void		thread_pause(t_philo *philo, int time);
+void		thread_pause(int time);
 
 void		cleanup(t_data data);
 

@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:37:35 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/17 10:11:33 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 09:15:00 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void	init_philo(t_data *data)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
 		pthread_mutex_init(&data->philo[i].infos, NULL);
-		pthread_mutex_init(&data->philo[i].sync, NULL);
 		data->philo[i].id = i + 1;
 		data->philo[i].r_fork = i;
 		if (i == 0)
@@ -84,7 +83,6 @@ int	init(t_data *data, int argc, char **argv)
 			sizeof (pthread_mutex_t));
 	if (data->forks == NULL)
 		return (print_error(MALLOC_ERR, "init.c:57"), FAILURE);
-	pthread_mutex_init(&data->mutex[START], NULL);
 	pthread_mutex_init(&data->mutex[LOG], NULL);
 	pthread_mutex_init(&data->mutex[COUNT], NULL);
 	pthread_mutex_init(&data->mutex[END], NULL);

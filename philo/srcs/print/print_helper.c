@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 12:55:45 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/08 12:56:15 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 08:54:54 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	print_helper(void)
 	printf("Time it takes a philosophers to sleep (in ms)\n");
 	printf("\topt_arg : number of time a philosopher must eat\n\n");
 	printf("Errors :\n");
-	printf("\tThere must be at least one philosopher at the table.\n");
+	printf("\tThere must be at least one philosopher at the table and ");
+	printf("not more than 200\n");
 	printf("\tPhilosophers must eat at least one time.\n");
 }

@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 10:00:37 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/17 12:07:11 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 09:13:42 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ static void	philo_death(t_philo *philo, bool *dead)
 /**
  * @brief monitoring the philo to check if he is dead or not.
  * 
- * The sync mutex is used to sync the monitor thread with his 
- * corresponding philo_life thread. (see philo_life.c)
  * The infos mutex protects the last_meal value.
  * We wait 5ms so that the thread is not always trying to lock 
  * the infos mutex resulting in possible speed lost.
@@ -58,8 +56,6 @@ void	*monitor(void *arg)
 	bool	dead;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->sync);
-	pthread_mutex_unlock(&philo->sync);
 	dead = false;
 	while (dead == false)
 	{
