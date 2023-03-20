@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 14:16:56 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/08 14:42:44 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:40:34 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 		return (print_helper(), FAILURE);
 	if (init(&data, argc, argv) == FAILURE)
 		return (cleanup(data), FAILURE);
-	if (threads(&data) == FAILURE)
+	if (philosophers(&data) == FAILURE)
 		return (cleanup(data), FAILURE);
 	return (cleanup(data), SUCCESS);
 }

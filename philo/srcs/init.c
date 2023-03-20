@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:37:35 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 09:15:00 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:51:06 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static int	get_values(t_data *data, int argc, char **argv)
 	data->time.die = ft_atoi(argv[2]);
 	data->time.eat = ft_atoi(argv[3]);
 	data->time.sleep = ft_atoi(argv[4]);
+	if (data->philo_nb % 2 == 1)
+		data->time.think = data->time.eat - 5;
 	data->max_meal = -1;
 	if (argc == 6)
 	{
@@ -66,6 +68,7 @@ static void	init_philo(t_data *data)
 		data->philo[i].time.die = data->time.die;
 		data->philo[i].time.eat = data->time.eat;
 		data->philo[i].time.sleep = data->time.sleep;
+		data->philo[i].time.think = data->time.think;
 		data->philo[i].data = data;
 		i++;
 	}
@@ -83,9 +86,8 @@ int	init(t_data *data, int argc, char **argv)
 			sizeof (pthread_mutex_t));
 	if (data->forks == NULL)
 		return (print_error(MALLOC_ERR, "init.c:57"), FAILURE);
-	pthread_mutex_init(&data->mutex[LOG], NULL);
-	pthread_mutex_init(&data->mutex[COUNT], NULL);
-	pthread_mutex_init(&data->mutex[END], NULL);
+	pthread_mutex_init(&data->mtx_stop, NULL);
+	pthread_mutex_init(&data->mtx_count, NULL);
 	init_philo(data);
 	return (SUCCESS);
 }

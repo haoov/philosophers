@@ -11,7 +11,7 @@ DEPDIR			= $(PROJDIR)/dep
 
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror
-DEBUG			= -g -fsanitize=thread
+DEBUG			= -g -fsanitize=
 INC				= -I $(HDDIR)
 
 #**************FILES**************#
@@ -29,6 +29,7 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/print/print_helper.c\
 				  $(SRCDIR)/process/philosophers.c\
 				  $(SRCDIR)/process/philo_life.c\
+				  $(SRCDIR)/process/threads.c\
 				  $(SRCDIR)/time/timestamp.c\
 				  $(SRCDIR)/time/process_pause.c
 HD				= $(HDDIR)/philo.h
@@ -51,7 +52,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(DONE_PRINT)
 	@printf "$(NC)Linking $@...$(NC)\033[0K\n"
-	@$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) -o $@
 	$(DONE_PRINT)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c

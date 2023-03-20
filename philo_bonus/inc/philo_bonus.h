@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:06:27 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/16 17:14:57 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:47:03 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,13 @@
 
 /********ENUM AND STRUCT********/
 
-typedef enum e_signal
-{
-	UNLOCK,
-	LOCK
-}t_signal;
-
 typedef struct s_time
 {
 	int	t0;
 	int	die;
 	int	eat;
 	int	sleep;
+	int	think;
 }t_time;
 
 typedef struct s_philo
@@ -75,7 +70,9 @@ typedef struct s_philo
 	int				id;
 	int				last_meal;
 	int				meal_count;
+	bool			stop;
 	pthread_mutex_t	infos;
+	pthread_mutex_t	end;
 	struct s_data	*data;
 	pid_t			pid;
 }t_philo;
@@ -99,6 +96,9 @@ int		init(t_data *data, int argc, char **argv);
 
 int		philo_start(t_data *data);
 void	philo_life(t_philo *philo);
+void	*monitor(void *arg);
+void	*stop(void *arg);
+void	check(t_philo *philo, bool *stop);
 
 int		timestamp(void);
 void	process_pause(t_philo *philo, int time);
@@ -111,7 +111,7 @@ int		ft_strlen(char *str);
 int		only_digit(char *str);
 void	*ft_calloc(int nb, int size);
 
-void	print_log(char *log, t_philo *philo, t_signal sig);
+void	print_log(char *log, t_philo *philo);
 void	print_helper(void);
 int		print_error(char *error, char *infos);
 

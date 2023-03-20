@@ -24,13 +24,14 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/utils/only_digit.c\
 				  $(SRCDIR)/utils/ft_strlen.c\
 				  $(SRCDIR)/utils/ft_calloc.c\
+				  $(SRCDIR)/utils/ft_min.c\
+				  $(SRCDIR)/utils/ft_max.c\
 				  $(SRCDIR)/print/print_log.c\
 				  $(SRCDIR)/print/print_error.c\
 				  $(SRCDIR)/print/print_helper.c\
-				  $(SRCDIR)/thread/threads.c\
+				  $(SRCDIR)/thread/philosophers.c\
 				  $(SRCDIR)/thread/philo_life.c\
-				  $(SRCDIR)/thread/check.c\
-				  $(SRCDIR)/thread/monitor.c\
+				  $(SRCDIR)/thread/actions.c\
 				  $(SRCDIR)/time/timestamp.c\
 				  $(SRCDIR)/time/thread_pause.c
 HD				= $(HDDIR)/philo.h

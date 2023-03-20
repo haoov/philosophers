@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 12:37:23 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 09:14:55 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:41:01 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	cleanup(t_data data)
 		clean_philo(data);
 	if (data.forks)
 		clean_forks(data);
-	pthread_mutex_destroy(&data.mutex[LOG]);
-	pthread_mutex_destroy(&data.mutex[END]);
-	pthread_mutex_destroy(&data.mutex[COUNT]);
+	pthread_mutex_destroy(&data.mtx_stop);
+	pthread_mutex_destroy(&data.mtx_count);
 }

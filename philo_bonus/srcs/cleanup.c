@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:54:55 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/16 16:10:55 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:27:16 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	clean_philo(t_data *data)
 	while (i < data->philo_nb)
 	{
 		pthread_mutex_destroy(&data->philo[i].infos);
+		pthread_mutex_destroy(&data->philo[i].end);
 		i++;
 	}
 	free(data->philo);

@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 14:16:00 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 10:16:17 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:40:34 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,30 +42,12 @@
 
 /********ENUM AND STRUCT********/
 
-typedef enum e_check
-{
-	FULL,
-	STOP
-}t_check;
-
-typedef enum e_signal
-{
-	FPRINT,
-	NOFPRINT
-}t_signal;
-
-typedef enum e_mutex
-{
-	LOG,
-	COUNT,
-	END
-}t_mutex;
-
 typedef struct s_time
 {
 	int	die;
 	int	eat;
 	int	sleep;
+	int	think;
 }t_time;
 
 typedef struct s_philo
@@ -90,33 +72,37 @@ typedef struct s_data
 	int				t0;
 	bool			stop;
 	t_time			time;
-	pthread_mutex_t	mutex[3];
+	pthread_mutex_t	mtx_stop;
+	pthread_mutex_t	mtx_count;
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
 }t_data;
 
 /********DECLARATION*********/
 
-int			init(t_data *data, int argc, char **argv);
+int		init(t_data *data, int argc, char **argv);
 
-int			threads(t_data *data);
-void		*philo_life(void *arg);
-void		*monitor(void *arg);
-void		check(t_philo *philo, t_check check);
+int		philosophers(t_data *data);
+void	*philo_life(void *arg);
+void	philo_meal(t_philo *philo);
+void	philo_log(t_philo *philo, char *log);
+void	*monitor(void *arg);
 
-int			timestamp(void);
-void		thread_pause(int time);
+int		timestamp(void);
+void	thread_pause(int time);
 
-void		cleanup(t_data data);
+void	cleanup(t_data data);
 
-int			ft_atoi(const char *str);
-int			ft_strcmp(const char *a, const char *b);
-int			ft_strlen(char *str);
-int			only_digit(char *str);
-void		*ft_calloc(int nb, int size);
+int		ft_atoi(const char *str);
+int		ft_strcmp(const char *a, const char *b);
+int		ft_strlen(char *str);
+int		only_digit(char *str);
+int		ft_min(int a, int b);
+int		ft_max(int a, int b);
+void	*ft_calloc(int nb, int size);
 
-void		print_log(char *log, t_philo *philo, t_signal flag);
-void		print_helper(void);
-void		print_error(char *error, char *infos);
+void	print_log(char *log, t_philo *philo);
+void	print_helper(void);
+void	print_error(char *error, char *infos);
 
 #endif

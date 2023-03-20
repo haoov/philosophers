@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads.c                                          :+:      :+:    :+:   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 14:08:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 10:21:45 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/20 15:07:59 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/20 15:09:05 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static void	thread_join(t_data *data, int th_nb)
 	i = 0;
 	if (th_nb < data->philo_nb)
 	{
-		pthread_mutex_lock(&data->mutex[END]);
+		pthread_mutex_lock(&data->mtx_stop);
 		data->stop = true;
-		pthread_mutex_unlock(&data->mutex[END]);
+		pthread_mutex_unlock(&data->mtx_stop);
 		print_error(THREAD_ERR, "threads.c");
 	}
 	while (i < th_nb)
@@ -45,7 +45,7 @@ static void	thread_join(t_data *data, int th_nb)
  * 
  * @param data a pointer to the main data struct.
 */
-int	threads(t_data *data)
+int	philosophers(t_data *data)
 {
 	int	i;
 
