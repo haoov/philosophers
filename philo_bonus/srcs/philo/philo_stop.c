@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_stop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 11:06:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/22 11:23:46 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/22 11:12:10 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 13:12:35 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	main(int argc, char **argv)
+void	*philo_stop(void *arg)
 {
-	t_data	data;
+	t_philo	*philo;
 
-	if (argc == 2 && !ft_strcmp(argv[1], HELP))
-		return (print_helper(), FAILURE);
-	if (init(&data, argc, argv) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	if (philosophers(&data) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	return (cleanup(&data), SUCCESS);
+	philo = (t_philo *)arg;
+	sem_wait(philo->data->end);
+	sem_post(philo->data->end);
+	sem_post(philo->data->count);
+	pthread_mutex_lock(&philo->infos);
+	philo->stop = true;
+	pthread_mutex_unlock(&philo->infos);
+	return (NULL);
 }

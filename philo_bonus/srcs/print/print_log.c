@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:50:18 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 17:46:48 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/22 11:29:45 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ void	print_log(char *log, t_philo *philo)
 	bool	stop;
 
 	stop = false;
-	sem_wait(philo->data->print);
 	time = timestamp() - philo->data->time.t0;
-	check(philo, &stop);
 	if (stop == false)
 		printf("%d %d %s\n", time, philo->id, log);
-	sem_post(philo->data->print);
 }

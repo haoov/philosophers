@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_pause.c                                    :+:      :+:    :+:   */
+/*   philo_put_down_fork.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 13:47:30 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/15 13:47:31 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/22 11:04:49 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 11:28:24 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	process_pause(t_philo *philo, int time)
+void	philo_put_down_fork(t_philo *philo, int fork_nb)
 {
-	int	start;
+	int	i;
 
-	(void)philo;
-	start = timestamp();
-	while (timestamp() - start < time)
-		usleep(1000);
+	i = 0;
+	while (i < fork_nb)
+	{
+		sem_post(philo->data->forks);
+		i++;
+	}
 }

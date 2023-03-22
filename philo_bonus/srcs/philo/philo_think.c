@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_think.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 11:06:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/22 11:23:46 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/22 10:59:43 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 14:21:12 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	main(int argc, char **argv)
+void	philo_think(t_philo *philo, bool *stop)
 {
-	t_data	data;
+	int	i;
 
-	if (argc == 2 && !ft_strcmp(argv[1], HELP))
-		return (print_helper(), FAILURE);
-	if (init(&data, argc, argv) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	if (philosophers(&data) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	return (cleanup(&data), SUCCESS);
+	i = 0;
+	philo_log(philo, THINK_LOG);
+	philo_wait(philo->data->time.think);
+	while (i < 2)
+	{
+		sem_wait(philo->data->forks);
+		philo_log(philo, FORK_LOG);
+		if (philo->data->philo_nb == 1)
+			philo_wait(philo->data->time.die);
+		philo_check(philo, stop);
+		if (*stop)
+			return (philo_put_down_fork(philo, i));
+		i++;
+	}
 }

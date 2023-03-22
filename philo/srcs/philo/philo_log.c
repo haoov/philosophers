@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_log.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 11:06:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/22 11:23:46 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/22 13:51:25 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 13:51:42 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
-int	main(int argc, char **argv)
+void	philo_log(t_philo *philo, char *log)
 {
-	t_data	data;
-
-	if (argc == 2 && !ft_strcmp(argv[1], HELP))
-		return (print_helper(), FAILURE);
-	if (init(&data, argc, argv) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	if (philosophers(&data) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	return (cleanup(&data), SUCCESS);
+	pthread_mutex_lock(&philo->data->mtx_stop);
+	if (philo->data->stop == false)
+		print_log(log, philo);
+	else
+		philo->stop = true;
+	pthread_mutex_unlock(&philo->data->mtx_stop);
 }

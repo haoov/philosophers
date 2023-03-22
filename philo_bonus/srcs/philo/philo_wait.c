@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_pause.c                                     :+:      :+:    :+:   */
+/*   philo_wait.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 18:57:20 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 09:47:00 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/22 11:06:46 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 11:07:13 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	thread_pause(int time)
+void	philo_wait(int time)
 {
 	int	start;
 

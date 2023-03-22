@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_put_down_forks.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 11:06:36 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/22 11:23:46 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/22 13:49:53 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 14:16:18 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
-int	main(int argc, char **argv)
+void	philo_put_down_forks(t_philo *philo)
 {
-	t_data	data;
-
-	if (argc == 2 && !ft_strcmp(argv[1], HELP))
-		return (print_helper(), FAILURE);
-	if (init(&data, argc, argv) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	if (philosophers(&data) == FAILURE)
-		return (cleanup(&data), FAILURE);
-	return (cleanup(&data), SUCCESS);
+	if (philo->l_fork == philo->r_fork)
+		pthread_mutex_unlock(&philo->data->forks[philo->l_fork]);
+	else
+	{
+		pthread_mutex_unlock(&philo->data->forks[philo->l_fork]);
+		pthread_mutex_unlock(&philo->data->forks[philo->r_fork]);
+	}
 }

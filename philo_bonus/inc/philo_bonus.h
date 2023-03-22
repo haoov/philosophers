@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:06:27 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 17:47:03 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:15:00 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ typedef struct s_philo
 	int				meal_count;
 	bool			stop;
 	pthread_mutex_t	infos;
-	pthread_mutex_t	end;
 	struct s_data	*data;
 	pid_t			pid;
 }t_philo;
@@ -94,15 +93,18 @@ typedef struct s_data
 
 int		init(t_data *data, int argc, char **argv);
 
-int		philo_start(t_data *data);
+int		philosophers(t_data *data);
 void	philo_life(t_philo *philo);
-void	*monitor(void *arg);
-void	*stop(void *arg);
-void	check(t_philo *philo, bool *stop);
+void	philo_think(t_philo *philo, bool *stop);
+void	philo_eat(t_philo *philo, bool *stop);
+void	philo_put_down_fork(t_philo *philo, int fork_nb);
+void	*philo_monitor(void *arg);
+void	*philo_stop(void *arg);
+void	philo_check(t_philo *philo, bool *stop);
 void	philo_log(t_philo *philo, char *log);
+void	philo_wait(int time);
 
 int		timestamp(void);
-void	process_pause(t_philo *philo, int time);
 
 void	cleanup(t_data *data);
 

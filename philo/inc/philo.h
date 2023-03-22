@@ -6,7 +6,7 @@
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 14:16:00 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 16:40:34 by rsabbah          ###   ########.fr       */
+/*   Updated: 2023/03/22 14:16:16 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,14 @@ int		init(t_data *data, int argc, char **argv);
 
 int		philosophers(t_data *data);
 void	*philo_life(void *arg);
-void	philo_meal(t_philo *philo);
+void	philo_eat(t_philo *philo);
 void	philo_log(t_philo *philo, char *log);
-void	*monitor(void *arg);
+void	*philo_monitor(void *arg);
+void	philo_think(t_philo *philo);
+void	philo_wait(int time);
+void	philo_put_down_forks(t_philo *philo);
 
 int		timestamp(void);
-void	thread_pause(int time);
 
 void	cleanup(t_data data);
 

@@ -19,20 +19,25 @@ INC				= -I $(HDDIR)
 SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/init.c\
 				  $(SRCDIR)/cleanup.c\
-				  $(SRCDIR)/philo_log.c\
-				  $(SRCDIR)/utils/ft_atoi.c\
-				  $(SRCDIR)/utils/ft_strcmp.c\
-				  $(SRCDIR)/utils/only_digit.c\
-				  $(SRCDIR)/utils/ft_strlen.c\
-				  $(SRCDIR)/utils/ft_calloc.c\
-				  $(SRCDIR)/print/print_log.c\
+				  $(SRCDIR)/timestamp.c\
+				  $(SRCDIR)/philosophers.c\
+				  $(SRCDIR)/philo/philo_check.c\
+				  $(SRCDIR)/philo/philo_eat.c\
+				  $(SRCDIR)/philo/philo_life.c\
+				  $(SRCDIR)/philo/philo_log.c\
+				  $(SRCDIR)/philo/philo_monitor.c\
+				  $(SRCDIR)/philo/philo_put_down_fork.c\
+				  $(SRCDIR)/philo/philo_stop.c\
+				  $(SRCDIR)/philo/philo_think.c\
+				  $(SRCDIR)/philo/philo_wait.c\
 				  $(SRCDIR)/print/print_error.c\
 				  $(SRCDIR)/print/print_helper.c\
-				  $(SRCDIR)/process/philosophers.c\
-				  $(SRCDIR)/process/philo_life.c\
-				  $(SRCDIR)/process/threads.c\
-				  $(SRCDIR)/time/timestamp.c\
-				  $(SRCDIR)/time/process_pause.c
+				  $(SRCDIR)/print/print_log.c\
+				  $(SRCDIR)/utils/ft_atoi.c\
+				  $(SRCDIR)/utils/ft_calloc.c\
+				  $(SRCDIR)/utils/ft_strcmp.c\
+				  $(SRCDIR)/utils/ft_strlen.c\
+				  $(SRCDIR)/utils/only_digit.c
 HD				= $(HDDIR)/philo.h
 OBJS			= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRCS:.c=.o))
 DEPS			= $(patsubst $(SRCDIR)/%,$(DEPDIR)/%,$(SRCS:.c=.d))

@@ -19,6 +19,15 @@ INC				= -I $(HDDIR)
 SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/init.c\
 				  $(SRCDIR)/cleanup.c\
+				  $(SRCDIR)/timestamp.c\
+				  $(SRCDIR)/philosophers.c\
+				  $(SRCDIR)/philo/philo_eat.c\
+				  $(SRCDIR)/philo/philo_life.c\
+				  $(SRCDIR)/philo/philo_log.c\
+				  $(SRCDIR)/philo/philo_monitor.c\
+				  $(SRCDIR)/philo/philo_put_down_forks.c\
+				  $(SRCDIR)/philo/philo_think.c\
+				  $(SRCDIR)/philo/philo_wait.c\
 				  $(SRCDIR)/utils/ft_atoi.c\
 				  $(SRCDIR)/utils/ft_strcmp.c\
 				  $(SRCDIR)/utils/only_digit.c\
@@ -26,14 +35,9 @@ SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/utils/ft_calloc.c\
 				  $(SRCDIR)/utils/ft_min.c\
 				  $(SRCDIR)/utils/ft_max.c\
-				  $(SRCDIR)/print/print_log.c\
 				  $(SRCDIR)/print/print_error.c\
 				  $(SRCDIR)/print/print_helper.c\
-				  $(SRCDIR)/thread/philosophers.c\
-				  $(SRCDIR)/thread/philo_life.c\
-				  $(SRCDIR)/thread/actions.c\
-				  $(SRCDIR)/time/timestamp.c\
-				  $(SRCDIR)/time/thread_pause.c
+				  $(SRCDIR)/print/print_log.c
 HD				= $(HDDIR)/philo.h
 OBJS			= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRCS:.c=.o))
 DEPS			= $(patsubst $(SRCDIR)/%,$(DEPDIR)/%,$(SRCS:.c=.d))

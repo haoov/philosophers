@@ -5,62 +5,45 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsabbah <rsabbah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/16 11:17:38 by rsabbah           #+#    #+#             */
-/*   Updated: 2023/03/20 18:08:24 by rsabbah          ###   ########.fr       */
+/*   Created: 2023/03/20 15:07:59 by rsabbah           #+#    #+#             */
+/*   Updated: 2023/03/22 13:55:58 by rsabbah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
-void	wait_all(t_data *data)
+static void	thread_join(t_data *data, int th_nb)
 {
 	int	i;
 
 	i = 0;
-	while (i < data->philo_nb)
+	if (th_nb < data->philo_nb)
 	{
-		waitpid(-1, 0, 0);
+		pthread_mutex_lock(&data->mtx_stop);
+		data->stop = true;
+		pthread_mutex_unlock(&data->mtx_stop);
+		print_error(THREAD_ERR, "threads.c");
+	}
+	while (i < th_nb)
+	{
+		pthread_join(data->philo[i].th, NULL);
 		i++;
 	}
 }
 
-void	check_full(t_data *data)
-{
-	int		i;
-
-	i = 0;
-	while (i < data->philo_nb)
-	{
-		if (waitpid(-1, 0, WNOHANG) > 0)
-			break ;
-		if (data->max_meal > 0)
-		{
-			sem_wait(data->count);
-			i++;
-		}
-	}
-	usleep(1000);
-	if (i == data->philo_nb)
-		sem_post(data->stop);
-}
-
-int	philo_start(t_data *data)
+int	philosophers(t_data *data)
 {
 	int	i;
 
 	i = 0;
-	data->time.t0 = timestamp();
-	sem_wait(data->stop);
+	data->t0 = timestamp();
 	while (i < data->philo_nb)
 	{
-		data->philo[i].pid = fork();
-		if (data->philo[i].pid == -1)
-			return (wait_all(data), FAILURE);
-		if (data->philo[i].pid == 0)
-			philo_life(&data->philo[i]);
+		if (pthread_create(&data->philo[i].th, NULL,
+				philo_life, &data->philo[i]) != 0)
+			return (thread_join(data, i), FAILURE);
 		i++;
 	}
-	check_full(data);
-	wait_all(data);
+	thread_join(data, i);
 	return (SUCCESS);
 }
