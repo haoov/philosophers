@@ -12,28 +12,23 @@
 
 #include "philo_bonus.h"
 
-void	philo_full(t_philo *philo)
+void	philo_full(t_philo *philo, bool *stop)
 {
 	philo->meal_count++;
 	if (philo->meal_count == philo->data->max_meal)
 		sem_post(philo->data->count);
+	check(philo, stop);
 }
 
-void	philo_meal(t_philo *philo)
+void	philo_eat(t_philo *philo, bool *stop)
 {
-	sem_wait(philo->data->forks);
-	print_log(FORK_LOG, philo);
-	if (philo->data->philo_nb == 1)
-		return (process_pause(philo, philo->data->time.die));
-	sem_wait(philo->data->forks);
-	print_log(FORK_LOG, philo);
+	philo_log(philo, EAT_LOG);
 	pthread_mutex_lock(&philo->infos);
 	philo->last_meal = timestamp();
 	pthread_mutex_unlock(&philo->infos);
-	philo_full(philo);
-	print_log(EAT_LOG, philo);
+	philo_full(philo, stop);
 	process_pause(philo, philo->data->time.eat);
-	print_log(SLEEP_LOG, philo);
+	philo_log(philo, SLEEP_LOG);
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
 }
@@ -52,10 +47,42 @@ int	start_threads(t_philo *philo, pthread_t *th_monitor, pthread_t *th_stop)
 
 void	check(t_philo *philo, bool *stop)
 {
-	pthread_mutex_lock(&philo->end);
+	pthread_mutex_lock(&philo->infos);
 	if (philo->stop == true)
 		*stop = true;
-	pthread_mutex_unlock(&philo->end);
+	pthread_mutex_unlock(&philo->infos);
+}
+
+void	put_down_forks(t_philo *philo, int fork_nb)
+{
+	int	i;
+
+	i = 0;
+	while (i < fork_nb)
+	{
+		sem_post(philo->data->forks);
+		i++;
+	}
+}
+
+void	philo_think(t_philo *philo, bool *stop)
+{
+	int	i;
+
+	i = 0;
+	philo_log(philo, THINK_LOG);
+	process_pause(philo, philo->data->time.think);
+	while (i < 2)
+	{
+		sem_wait(philo->data->forks);
+		if (philo->data->philo_nb == 1)
+			process_pause(philo, philo->data->time.die);
+		check(philo, stop);
+		if (*stop)
+			return (put_down_forks(philo, i));
+		philo_log(philo, FORK_LOG);
+		i++;
+	}
 }
 
 void	philo_life(t_philo *philo)
@@ -75,9 +102,8 @@ void	philo_life(t_philo *philo)
 	}
 	while (stop == false)
 	{
-		print_log(THINK_LOG, philo);
-		process_pause(philo, philo->data->time.think);
-		philo_meal(philo);
+		philo_think(philo, &stop);
+		philo_eat(philo, &stop);
 		process_pause(philo, philo->data->time.sleep);
 		check(philo, &stop);
 	}

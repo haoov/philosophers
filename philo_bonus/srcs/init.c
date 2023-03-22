@@ -70,10 +70,10 @@ int	init_sem(t_data *data)
 	sem_unlink(SEM_FORKS);
 	sem_unlink(SEM_COUNT);
 	sem_unlink(SEM_STOP);
-	sem_unlink(SEM_PRINT);
+	sem_unlink(SEM_END);
 	data->forks = sem_open(SEM_FORKS, O_CREAT, 0777, data->philo_nb);
 	data->count = sem_open(SEM_COUNT, O_CREAT, 0777, 0);
-	data->print = sem_open(SEM_PRINT, O_CREAT, 0777, 1);
+	data->end = sem_open(SEM_END, O_CREAT, 0777, 0);
 	data->stop = sem_open(SEM_STOP, O_CREAT, 0777, 1);
 	return (SUCCESS);
 }

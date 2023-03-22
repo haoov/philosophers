@@ -50,7 +50,7 @@
 # define SEM_FORKS	"forks_semaphore"
 # define SEM_STOP	"stop_semaphore"
 # define SEM_COUNT	"count_semaphore"
-# define SEM_PRINT	"print_semaphore"
+# define SEM_END	"end_semaphore"
 # define STOP		1
 # define DEAD		2
 
@@ -84,8 +84,8 @@ typedef struct s_data
 	int				full_count;
 	sem_t			*forks;
 	sem_t			*count;
-	sem_t			*print;
 	sem_t			*stop;
+	sem_t			*end;
 	t_time			time;
 	t_philo			*philo;
 }t_data;
@@ -99,6 +99,7 @@ void	philo_life(t_philo *philo);
 void	*monitor(void *arg);
 void	*stop(void *arg);
 void	check(t_philo *philo, bool *stop);
+void	philo_log(t_philo *philo, char *log);
 
 int		timestamp(void);
 void	process_pause(t_philo *philo, int time);

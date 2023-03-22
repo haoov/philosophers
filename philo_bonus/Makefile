@@ -19,6 +19,7 @@ INC				= -I $(HDDIR)
 SRCS			= $(SRCDIR)/main.c\
 				  $(SRCDIR)/init.c\
 				  $(SRCDIR)/cleanup.c\
+				  $(SRCDIR)/philo_log.c\
 				  $(SRCDIR)/utils/ft_atoi.c\
 				  $(SRCDIR)/utils/ft_strcmp.c\
 				  $(SRCDIR)/utils/only_digit.c\

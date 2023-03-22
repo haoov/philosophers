@@ -32,11 +32,11 @@ void	cleanup(t_data *data)
 	if (data->philo)
 		clean_philo(data);
 	sem_close(data->forks);
-	sem_close(data->print);
+	sem_close(data->end);
 	sem_close(data->count);
 	sem_close(data->stop);
 	sem_unlink(SEM_FORKS);
 	sem_unlink(SEM_COUNT);
 	sem_unlink(SEM_STOP);
-	sem_unlink(SEM_PRINT);
+	sem_unlink(SEM_END);
 }
